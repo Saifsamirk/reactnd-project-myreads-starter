@@ -1,27 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getAll } from "../BooksAPI";
+import { getAll, update } from "../BooksAPI";
 
 class Shelves extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      myBooks: [],
-    };
-  }
-
-  /**
-   Run the following function whenever the component renders 
-   */
-  componentDidMount() {
-    /*
-    Fetch all books selected by me and display them as a list here 
-    within the component. When the request succeeds, the state is modified 
-    and added to it, the list of selected books fetched from the API 
-    */
-    getAll().then((data) => {
-      this.setState({ myBooks: data });
-    });
   }
 
   /**
@@ -32,7 +15,7 @@ class Shelves extends Component {
     /* Filter the books upon the value of the shelf and then set the state 
     with the new filtered array 
     */
-    const filteredBooks = this.state.myBooks.filter(
+    const filteredBooks = this.props.myBooks.filter(
       (book) => book.shelf === key
     );
     return filteredBooks || [];
@@ -42,13 +25,19 @@ class Shelves extends Component {
    * @param shelf : the selected shelf that the user chooses
    * @returns a new array of books with their modified shelves accordingly
    */
-  handleShelfChange = (event) => {
-    console.log(event.target.value);
+  handleShelfChange = (event, book) => {
+    // Get the value of the selected shelf
+    let selectedShelf = event.target.value;
+    update(book, selectedShelf).then((_data) => {
+      // Fetch all books again with the data updated for shelves
+      getAll().then((data) => {
+        // Set the state within the UI to rearrange the books upon the shelves
+        this.props.setState({ myBooks: data });
+      });
+    });
   };
 
   render() {
-    console.log(this.state.myBooks);
-
     /* Initialize an array of different books types to loop through it and render 
     all books of each type (shelf)
     */
@@ -86,7 +75,9 @@ class Shelves extends Component {
                               />
                               <div className="book-shelf-changer">
                                 <select
-                                  onChange={this.handleShelfChange}
+                                  onChange={(event) =>
+                                    this.handleShelfChange(event, book)
+                                  }
                                   defaultValue={book.shelf}
                                 >
                                   <option value="move" disabled>

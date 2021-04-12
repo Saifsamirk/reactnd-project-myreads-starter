@@ -85,6 +85,27 @@ The backend API uses a fixed set of cached search results and is limited to a pa
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+## App components: the app contains a folder named, "components" and inside, there are the three main components that our app is built upon. 
+
+-- The 1st is "Home" which holds all routes and intially fetch "Your books" from the backend. 
+-- The 2nd is "Shelves" which contains the main page with all shelves and render each book according to each shelf type returned from the backend 
+-- The 3rd is "Create" which represents the section that searches for a certain book and then, add it accordingly to the desired shelf. 
+
+## Life Cycle Methods Used: 
+-- componentDidMount: which hooks into the lifecycle of React DOM. It primarily does, "something" whenever your component renders. Here, it fetches all the selected books and display them accordingly in the view 
+
+## Function used: 
+
+-- filterBooks (Shelves) : which removes replicated code and just render one ordered list but changes the title and the key upon the shelf's value. Which results in rendering all types of shelves without replicating a single line of code. 
+
+-- handleShelfChange (Shelves, Create) : it takes the selected shelf from the dropdown and send a request to the backend to update it. Then, it fetches the books again from the backend to keep the UI updated 
+
+-- onSearch (Create) : the only argument of this function is the key word. It fetches the data from the backend upon this keyword and updates the UI accordingly 
+
+## Add-Ons: 
+
+-- shelves: an array of objects that has a label for each shelf (For the UI) and also a value to be used in filtering the books list upon the shelf type. 
+
 ## Contributing
 
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
